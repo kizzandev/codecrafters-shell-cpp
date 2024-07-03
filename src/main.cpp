@@ -12,6 +12,8 @@ int main() {
 
     if (input == "exit 0") break;
 
+    std::cout << input.substr(5) << '\n';
+
     if (input.substr(0,5) == "echo") std::cout << input.substr(6) << '\n' << std::unitbuf;
     else std::cerr << input << ": command not found\n" << std::unitbuf;
   }
