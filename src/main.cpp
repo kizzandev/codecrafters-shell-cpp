@@ -5,14 +5,13 @@ int main() {
   std::cout << std::unitbuf;
   std::cerr << std::unitbuf;  
 
-  while (1) {
-    std::cout << "$ ";
-    std::string input;
+  std::cout << "$ ";
+  std::string input;
+  while (input.find("exit") != 0) {
     std::getline(std::cin, input);
 
-    if (input == "exit 0") break;
-
-    if (input.substr(0,5) == "echo") std::cout << input.substr(6,input.size()-1) << '\n' << std::unitbuf;
+    if (input.find("echo ") == 0) std::cout << input.substr(5) << '\n' << std::unitbuf;
     else std::cerr << input << ": command not found\n" << std::unitbuf;
+    std::cout << "$ ";
   }
 }
