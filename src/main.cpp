@@ -10,6 +10,6 @@ int main() {
     std::string input;
     std::getline(std::cin, input);
 
-    std::cerr << input << ": command not found" << std::unitbuf;
+    std::cerr << input << ": command not found\n" << std::unitbuf;
   }
 }
