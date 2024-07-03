@@ -11,7 +11,8 @@ int main() {
     std::getline(std::cin, input);
 
     if (input == "exit 0") break;
-    else if (input.substr(0,6) == "echo ") std::cout << input.substr(6) << std::unitbuf;
+
+    if (input.substr(0,5) == "echo") std::cout << input.substr(6) << '\n' << std::unitbuf;
     else std::cerr << input << ": command not found\n" << std::unitbuf;
   }
 }
