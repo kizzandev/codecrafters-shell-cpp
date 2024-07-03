@@ -32,7 +32,7 @@ int main()
       }
       if (!found)
       {
-        std::cerr << input << ": not found\n"
+        std::cerr << cmd << ": not found\n"
                   << std::unitbuf;
       }
     }
