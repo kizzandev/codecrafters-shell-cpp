@@ -169,7 +169,7 @@ int main() {
           std::filesystem::current_path(path);
         }
 
-        std::cout << "cd: " << std::filesystem::current_path() << '\n';
+        // std::cout << "cd: " << std::filesystem::current_path() << '\n';
         break;
       }
       default:
