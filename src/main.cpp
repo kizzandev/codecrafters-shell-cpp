@@ -20,6 +20,9 @@ enum Commands {
   cmd_cd
 };
 
+// . // .. // path/to //~/home
+enum Directions { dir_current, dir_prev, dir_to, dir_home };
+
 Commands strToCmd(const std::string &cmd) {
   if (cmd.find("echo") == 0)
     return cmd_echo;
@@ -112,13 +115,14 @@ int main() {
 
     Commands cmd = strToCmd(input);
     switch (cmd) {
-      case cmd_echo:
+      case cmd_echo: {
         for (size_t i = 0; i < args.size(); ++i) {
           std::cout << args[i];
           if (i != args.size() - 1) std::cout << ' ';
         }
         std::cout << '\n';
         break;
+      }
       case cmd_type: {
         if (args.empty()) {
           std::cerr << "type: missing argument\n";
@@ -139,16 +143,35 @@ int main() {
         }
         break;
       }
-      case cmd_exit:
+      case cmd_exit: {
         exit = true;
         break;
+      }
       case cmd_pwd: {
         std::string path = std::filesystem::current_path();
         std::cout << path << '\n';
         break;
       }
-      case cmd_cd:
+      case cmd_cd: {
+        if (args.empty()) {
+          std::cerr << "cd: missing argument\n";
+          break;
+        }
+
+        std::string path = args[0];
+        if (path == "..") {
+          std::filesystem::current_path(std::filesystem::current_path().parent_path());
+        } else if (path == "~") {
+          std::filesystem::current_path(std::filesystem::path(std::getenv("HOME")));
+        } else if (path == ".") {
+          std::filesystem::current_path(std::filesystem::current_path());
+        } else {
+          std::filesystem::current_path(path);
+        }
+
+        std::cout << "cd: " << std::filesystem::current_path() << '\n';
         break;
+      }
       default:
         execute_ext_command(command, args);
         break;
