@@ -2,25 +2,18 @@
 #include <iostream>
 #include <sstream>
 
-enum Commands {
-  cmd_echo,
-  cmd_type,
-  cmd_exit,
-  cmd_notValid,
-  cmd_ls,
-  cmd_abcd
-};
+enum Commands { cmd_echo, cmd_type, cmd_exit, cmd_notValid, cmd_ls, cmd_abcd };
 
 Commands strToCmd(std::string cmd) {
-  if (cmd.find("echo ") == 0)
+  if (cmd.find("echo") == 0)
     return cmd_echo;
-  else if (cmd.find("type ") == 0)
+  else if (cmd.find("type") == 0)
     return cmd_type;
-  else if (cmd.find("exit ") == 0)
+  else if (cmd.find("exit") == 0)
     return cmd_exit;
-  else if (cmd.find("ls ") == 0)
+  else if (cmd.find("ls") == 0)
     return cmd_ls;
-  else if (cmd.find("abcd ") == 0)
+  else if (cmd.find("abcd") == 0)
     return cmd_abcd;
   else
     return cmd_notValid;
