@@ -69,7 +69,7 @@ int main() {
           std::string path = get_path(cmd);
 
           if (path.empty()) {
-            std::cerr << cmd << " not found\n";
+            std::cerr << cmd << ": not found\n";
           } else {
             std::cout << cmd << " is " << path << std::endl;
           }
