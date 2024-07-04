@@ -76,9 +76,6 @@ int main() {
       case cmd_exit:
         exit = true;
         break;
-      case cmd_cat: {
-        break;
-      }
       default:
         std::cerr << input << ": command not found\n";
         break;
