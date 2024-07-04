@@ -16,7 +16,8 @@ enum Commands {
   cmd_notValid,
   cmd_ls,
   cmd_abcd,
-  cmd_pwd
+  cmd_pwd,
+  cmd_cd
 };
 
 Commands strToCmd(const std::string &cmd) {
@@ -32,6 +33,8 @@ Commands strToCmd(const std::string &cmd) {
     return cmd_abcd;
   else if (cmd.find("pwd") == 0)
     return cmd_pwd;
+  else if (cmd.find("cd") == 0)
+    return cmd_cd;
   else
     return cmd_notValid;
 }
@@ -144,6 +147,8 @@ int main() {
         std::cout << path << '\n';
         break;
       }
+      case cmd_cd:
+        break;
       default:
         execute_ext_command(command, args);
         break;
