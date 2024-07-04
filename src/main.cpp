@@ -32,7 +32,7 @@ int main() {
       case cmd_type: {
         std::string cmd = input.substr(5);
         Commands builtin = strToCmd(cmd);
-        if (builtin != cmd_invalid) {
+        if (builtin != cmd_notValid) {
           std::cout << cmd << " is a shell builtin\n" << std::unitbuf;
         } else {
           std::cerr << cmd << ": not found\n" << std::unitbuf;
