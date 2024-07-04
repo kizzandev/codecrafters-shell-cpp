@@ -66,7 +66,7 @@ int main() {
         if (builtin != cmd_notValid) {
           std::cout << cmd << " is a shell builtin\n";
         } else {
-          std::string path = get_path(builtin);
+          std::string path = get_path(input);
 
           if (path.empty()) {
             std::cerr << cmd << " not found\n";
