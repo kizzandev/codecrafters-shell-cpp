@@ -79,9 +79,11 @@ int main() {
           break;
         }
 
+        std::stringstream ss(input);
         std::string word;
         std::vector<std::string> args;
-        while (std::getline(input, word, ' ')) {
+        while (!ss.eof()) {
+          std::getline(ss, word, ' ');
           args.push_back(word);
         }
 
