@@ -77,14 +77,15 @@ int main() {
 
         std::ifstream file(filepath);
         if (file.good()) {
-          std::string command = "exec " + filepath;
+          std::string command = "exec " + filepath + input;
           std::system(command.c_str());
-        } else if (filepath.empty()) {
-          std::cerr << input << ": command not found\n";
           break;
         }
 
-        /*std::stringstream ss(input);
+        std::cerr << input << ": command not found\n";
+        break;
+
+        /* std::stringstream ss(input);
         std::string word;
         std::vector<std::string> args;
         while (!ss.eof()) {
