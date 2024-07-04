@@ -1,6 +1,8 @@
+#include <filesystem>
 #include <iostream>
+#include <sstream>
 
-enum Commands { cmd_echo, cmd_type, cmd_exit, cmd_notValid };
+enum Commands { cmd_echo, cmd_type, cmd_exit, cmd_notValid, cmd_ls, cmd_abcd };
 
 Commands strToCmd(std::string cmd) {
   if (cmd.find("echo ") == 0)
@@ -11,6 +13,21 @@ Commands strToCmd(std::string cmd) {
     return cmd_exit;
   else
     return cmd_notValid;
+}
+
+std::string get_path(std::string command) {
+  std::string env_path = std::getenv("PATH");
+  std::stringstream ss(env_path);
+  std::string path;
+
+  while (!ss.eof()) {
+    std::getline(ss, path, ':');
+    std::string abs_path = path + '/' + command;
+    if (std::filesystem::exists(abs_path)) {
+      return abs_path;
+    }
+  }
+  return "";
 }
 
 int main() {
@@ -27,15 +44,21 @@ int main() {
 
     switch (cmd) {
       case cmd_echo:
-        std::cout << input.substr(5) << '\n' << std::unitbuf;
+        std::cout << input.substr(5) << '\n';
         break;
       case cmd_type: {
         std::string cmd = input.substr(5);
         Commands builtin = strToCmd(cmd);
         if (builtin != cmd_notValid) {
-          std::cout << cmd << " is a shell builtin\n" << std::unitbuf;
+          std::cout << cmd << " is a shell builtin\n";
         } else {
-          std::cerr << cmd << ": not found\n" << std::unitbuf;
+          std::string path = get_path(input);
+
+          if (path.empty()) {
+            std::cerr << cmd << " not found\n";
+          } else {
+            std::cout << cmd << " is " << path << '\n';
+          }
         }
         break;
       }
@@ -43,7 +66,7 @@ int main() {
         exit = true;
         break;
       default:
-        std::cerr << input << ": command not found\n" << std::unitbuf;
+        std::cerr << input << ": command not found\n";
         break;
     }
     std::cout << "$ ";
