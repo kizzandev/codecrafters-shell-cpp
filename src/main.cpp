@@ -49,16 +49,24 @@ void execute_ext_command(const std::string &command,
     return;
   }
 
-  std::vector<char *> c_args;
-  c_args.push_back(strdup(path.c_str()));
+  std::vector<std::unique_ptr<char[]>> c_args;
+  c_args.push_back(std::make_unique<char[]>(path.size() + 1));
+  std::strcpy(c_args.back().get(), path.c_str());
+
   for (const auto &arg : args) {
-    c_args.push_back(strdup(arg.c_str()));
+    c_args.push_back(std::make_unique<char[]>(arg.size() + 1));
+    std::strcpy(c_args.back().get(), arg.c_str());
   }
   c_args.push_back(nullptr);
 
+  std::vector<char *> c_args_raw;
+  for (const auto &arg : c_args) {
+    c_args_raw.push_back(arg.get());
+  }
+
   pid_t pid = fork();
   if (pid == 0) {
-    execvp(c_args[0], c_args.data());
+    execvp(c_args_raw[0], c_args_raw.data());
     std::cerr << "Failed to execute " << command << '\n';
     exit(EXIT_FAILURE);
   } else if (pid > 0) {
@@ -66,10 +74,6 @@ void execute_ext_command(const std::string &command,
     waitpid(pid, &status, 0);
   } else {
     std::cerr << "Failed to fork\n";
-  }
-
-  for (char *arg : c_args) {
-    free(arg);
   }
 }
 
