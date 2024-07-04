@@ -48,7 +48,7 @@ int main() {
         exit = true;
         break;
       default:
-        else std::cerr << input << ": command not found\n" << std::unitbuf;
+        std::cerr << input << ": command not found\n" << std::unitbuf;
         break;
     }
     std::cout << "$ ";
