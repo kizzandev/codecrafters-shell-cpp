@@ -72,14 +72,18 @@ int main() {
         break;
       }
       default: {
-        std::string path = get_path(input);
+        std::string filepath = get_path(input);
 
-        if (path.empty()) {
+        std::ifstream file(filepath);
+        if (!file.good()) {
           std::cerr << input << ": command not found\n";
-          break;
+        } else {
+          std::string command = "exec " + filepath;
+          std::system(command.c_str());
         }
+        break;
 
-        std::stringstream ss(input);
+        /*std::stringstream ss(input);
         std::string word;
         std::vector<std::string> args;
         while (!ss.eof()) {
@@ -87,13 +91,13 @@ int main() {
           args.push_back(word);
         }
 
-        std::string cmd_and_path = path;
+        std::string cmd_and_path = filepath;
         for (int i = 1; i < args.size(); i++) {
           cmd_and_path += " " + args[i];
         }
         const char *cmd_ptr = cmd_and_path.c_str();
         system(cmd_ptr);
-        break;
+        break;*/
       }
     }
     if (!exit) std::cout << "$ ";
