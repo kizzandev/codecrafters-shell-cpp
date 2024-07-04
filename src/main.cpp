@@ -74,6 +74,6 @@ int main() {
         std::cerr << input << ": command not found\n";
         break;
     }
-    std::cout << "$ ";
+    if (!exit) std::cout << "$ ";
   }
 }
