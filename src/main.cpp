@@ -70,9 +70,28 @@ int main() {
         exit = true;
         break;
       }
-      default:
-        std::cerr << input << ": command not found\n";
+      default: {
+        std::string path = get_path(input);
+
+        if (path.empty()) {
+          std::cerr << input << ": command not found\n";
+          break;
+        }
+
+        std::string word;
+        std::vector<std::string> args;
+        while (std::getline(input, word, ' ')) {
+          args.push_back(word);
+        }
+
+        std::string cmd_and_path = path;
+        for (int i = 1; i < args.size(); i++) {
+          cmd_and_path += " " + args[i];
+        }
+        const char *cmd_ptr = cmd_and_path.c_str();
+        system(cmd_ptr);
         break;
+      }
     }
     if (!exit) std::cout << "$ ";
   }
