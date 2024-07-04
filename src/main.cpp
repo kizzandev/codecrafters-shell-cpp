@@ -139,6 +139,11 @@ int main() {
       case cmd_exit:
         exit = true;
         break;
+      case cmd_pwd: {
+        std::string path = std::filesystem::current_path();
+        std::cout << path << '\n';
+        break;
+      }
       default:
         execute_ext_command(command, args);
         break;
