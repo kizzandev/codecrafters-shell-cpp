@@ -6,7 +6,7 @@
 
 enum Commands { cmd_echo, cmd_type, cmd_exit, cmd_notValid, cmd_ls, cmd_abcd };
 
-Commands strToCmd(std::string cmd) {
+Commands strToCmd(const std::string &cmd) {
   if (cmd.find("echo") == 0)
     return cmd_echo;
   else if (cmd.find("type") == 0)
@@ -21,7 +21,7 @@ Commands strToCmd(std::string cmd) {
     return cmd_notValid;
 }
 
-std::string get_path(std::string command) {
+std::string get_path(const std::string &command) {
   std::string env_path = std::getenv("PATH");
   std::stringstream ss(env_path);
   std::string path;
@@ -36,6 +36,38 @@ std::string get_path(std::string command) {
   return "";
 }
 
+void execute_ext_command(const std::string &command,
+                         const std::vector<std::string> &args) {
+  std::string path = get_path(command);
+  if (path.empty()) {
+    std::cerr << command << ": command not found\n";
+    return;
+  }
+
+  std::vector<char *> c_args;
+  c_args.push_back(strdup(path.c_str()));
+  for (const auto &arg : args) {
+    c_args.push_back(strdup(arg.c_str()));
+  }
+  c_args.push_back(nullptr);
+
+  pid_t pid = fork();
+  if (pid == 0) {
+    execvp(c_args[0], c_args.data());
+    std::cerr << "Failed to execute " << command << '\n';
+    exit(EXIT_FAILURE);
+  } else if (pid > 0) {
+    int status;
+    waitpid(pid, &status, 0);
+  } else {
+    std::cerr << "Failed to fork\n";
+  }
+
+  for (char *arg : c_args) {
+    free(arg);
+  }
+}
+
 int main() {
   // Flush after every std::cout / std:cerr
   std::cout << std::unitbuf;
@@ -46,61 +78,50 @@ int main() {
   std::cout << "$ ";
   std::string input;
   while (!exit && std::getline(std::cin, input)) {
-    Commands cmd = strToCmd(input);
+    std::istringstread iss(input);
+    std::string command;
+    iss >> command;
 
+    std::vector<std::string> args;
+    std::string arg;
+    while (iss >> arg) {
+      args.push_back(arg);
+    }
+
+    Commands cmd = strToCmd(input);
     switch (cmd) {
       case cmd_echo:
-        std::cout << input.substr(5) << '\n';
+        for (const auto &arg : args) {
+          std::cout << arg << ' ';
+        }
+        std::cout << '\n';
         break;
       case cmd_type: {
-        std::string cmd = input.substr(5);
+        if (args.empty()) {
+          std::cerr << "type: missing argument\n";
+          break;
+        }
+
+        std::string cmd = args[0];
         Commands builtin = strToCmd(cmd);
         if (builtin != cmd_notValid) {
           std::cout << cmd << " is a shell builtin\n";
         } else {
           std::string path = get_path(cmd);
-
           if (path.empty()) {
             std::cerr << cmd << ": not found\n";
           } else {
-            std::cout << cmd << " is " << path << std::endl;
+            std::cout << cmd << " is " << path << '\n';
           }
         }
         break;
       }
-      case cmd_exit: {
+      case cmd_exit:
         exit = true;
         break;
-      }
-      default: {
-        std::string filepath = get_path(input);
-
-        std::ifstream file(filepath);
-        if (file.good()) {
-          std::string command = "exec " + filepath + input;
-          std::system(command.c_str());
-          break;
-        }
-
-        std::cerr << input << ": command not found\n";
+      default:
+        execute_ext_command(command, args);
         break;
-
-        /* std::stringstream ss(input);
-        std::string word;
-        std::vector<std::string> args;
-        while (!ss.eof()) {
-          std::getline(ss, word, ' ');
-          args.push_back(word);
-        }
-
-        std::string cmd_and_path = filepath;
-        for (int i = 1; i < args.size(); i++) {
-          cmd_and_path += " " + args[i];
-        }
-        const char *cmd_ptr = cmd_and_path.c_str();
-        system(cmd_ptr);
-        break;*/
-      }
     }
     if (!exit) std::cout << "$ ";
   }
