@@ -9,7 +9,7 @@ Commands strToCmd(std::string cmd) {
     return cmd_echo;
   else if (cmd.find("type") == 0)
     return cmd_type;
-  else if (cmd.find("exit 0") == 0)
+  else if (cmd.find("exit") == 0)
     return cmd_exit;
   else if (cmd.find("ls") == 0)
     return cmd_ls;
