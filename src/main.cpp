@@ -8,8 +8,7 @@ enum Commands {
   cmd_exit,
   cmd_notValid,
   cmd_ls,
-  cmd_abcd,
-  cmd_cat
+  cmd_abcd
 };
 
 Commands strToCmd(std::string cmd) {
@@ -23,8 +22,6 @@ Commands strToCmd(std::string cmd) {
     return cmd_ls;
   else if (cmd.find("abcd ") == 0)
     return cmd_abcd;
-  else if (cmd.find("cat ") == 0)
-    return cmd_cat;
   else
     return cmd_notValid;
 }
