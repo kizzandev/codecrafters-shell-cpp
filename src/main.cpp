@@ -96,8 +96,9 @@ int main() {
     Commands cmd = strToCmd(input);
     switch (cmd) {
       case cmd_echo:
-        for (const auto &arg : args) {
-          std::cout << arg << ' ';
+        for (size_t i = 0; i < args.size(); ++i) {
+          std::cout << args[i];
+          if (i != args.size() - 1) std::cout << ' ';
         }
         std::cout << '\n';
         break;
