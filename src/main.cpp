@@ -159,7 +159,7 @@ int main() {
         }
 
         std::string path = args[0];
-        if (path == "..") {
+        if (path == ".." && !std::filesystem::current_path().parent_path().empty()) {
           std::filesystem::current_path(std::filesystem::current_path().parent_path());
         } else if (path == "~") {
           std::filesystem::current_path(std::filesystem::path(std::getenv("HOME")));
