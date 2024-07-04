@@ -9,7 +9,15 @@
 #include <sstream>
 #include <vector>
 
-enum Commands { cmd_echo, cmd_type, cmd_exit, cmd_notValid, cmd_ls, cmd_abcd };
+enum Commands {
+  cmd_echo,
+  cmd_type,
+  cmd_exit,
+  cmd_notValid,
+  cmd_ls,
+  cmd_abcd,
+  cmd_pwd
+};
 
 Commands strToCmd(const std::string &cmd) {
   if (cmd.find("echo") == 0)
@@ -22,6 +30,8 @@ Commands strToCmd(const std::string &cmd) {
     return cmd_ls;
   else if (cmd.find("abcd") == 0)
     return cmd_abcd;
+  else if (cmd.find("pwd") == 0)
+    return cmd_pwd;
   else
     return cmd_notValid;
 }
