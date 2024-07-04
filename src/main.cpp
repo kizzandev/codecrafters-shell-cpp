@@ -83,7 +83,7 @@ int main() {
   std::cout << "$ ";
   std::string input;
   while (!exit && std::getline(std::cin, input)) {
-    std::istringstread iss(input);
+    std::istringstream iss(input);
     std::string command;
     iss >> command;
 
