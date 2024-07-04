@@ -31,15 +31,10 @@ int main() {
         break;
       case cmd_type: {
         std::string cmd = input.substr(5);
-        bool found = false;
-        for (auto &command : commands) {
-          if (command == cmd) {
-            std::cout << cmd << " is a shell builtin\n" << std::unitbuf;
-            found = true;
-            break;
-          }
-        }
-        if (!found) {
+        Commands builtin = strToCmd(cmd);
+        if (builtin != cmd_invalid) {
+          std::cout << cmd << " is a shell builtin\n" << std::unitbuf;
+        } else {
           std::cerr << cmd << ": not found\n" << std::unitbuf;
         }
         break;
