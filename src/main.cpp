@@ -20,9 +20,6 @@ enum Commands {
   cmd_cd
 };
 
-// . // .. // path/to //~/home
-enum Directions { dir_current, dir_prev, dir_to, dir_home };
-
 Commands strToCmd(const std::string &cmd) {
   if (cmd.find("echo") == 0)
     return cmd_echo;
