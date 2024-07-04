@@ -159,17 +159,20 @@ int main() {
         }
 
         std::string path = args[0];
-        if (path == ".." && !std::filesystem::current_path().parent_path().empty()) {
-          std::filesystem::current_path(std::filesystem::current_path().parent_path());
+        if (path == ".." &&
+            !std::filesystem::current_path().parent_path().empty()) {
+          std::filesystem::current_path(
+              std::filesystem::current_path().parent_path());
         } else if (path == "~") {
-          std::filesystem::current_path(std::filesystem::path(std::getenv("HOME")));
+          std::filesystem::current_path(
+              std::filesystem::path(std::getenv("HOME")));
         } else if (path == ".") {
           std::filesystem::current_path(std::filesystem::current_path());
-        } else {
+        } else if (std::filesystem::exists(path)) {
           std::filesystem::current_path(path);
+        } else {
+          std::cerr << "cd: " << path << ": No such file or directory\n";
         }
-
-        // std::cout << "cd: " << std::filesystem::current_path() << '\n';
         break;
       }
       default:
