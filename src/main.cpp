@@ -75,17 +75,14 @@ int main() {
       default: {
         std::string filepath = get_path(input);
 
-        if (filepath.empty()) {
-          std::cerr << input << ": command not found\n";
-          break;
-        }
-
         std::ifstream file(filepath);
         if (file.good()) {
           std::string command = "exec " + filepath;
           std::system(command.c_str());
+        } else if (filepath.empty()) {
+          std::cerr << input << ": command not found\n";
+          break;
         }
-        break;
 
         /*std::stringstream ss(input);
         std::string word;
