@@ -1,7 +1,7 @@
 #include <filesystem>
+#include <fstream>
 #include <iostream>
 #include <sstream>
-#include <fstream>
 #include <vector>
 
 enum Commands { cmd_echo, cmd_type, cmd_exit, cmd_notValid, cmd_ls, cmd_abcd };
@@ -75,10 +75,13 @@ int main() {
       default: {
         std::string filepath = get_path(input);
 
-        std::ifstream file(filepath);
-        if (!file.good()) {
+        if (filepath.empty()) {
           std::cerr << input << ": command not found\n";
-        } else {
+          break;
+        }
+
+        std::ifstream file(filepath);
+        if (file.good()) {
           std::string command = "exec " + filepath;
           std::system(command.c_str());
         }
