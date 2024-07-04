@@ -9,7 +9,7 @@ Commands strToCmd(std::string cmd) {
     return cmd_echo;
   else if (cmd.find("type") == 0)
     return cmd_type;
-  else if (cmd.find("exit") == 0)
+  else if (cmd.find("exit 0") == 0)
     return cmd_exit;
   else if (cmd.find("ls") == 0)
     return cmd_ls;
@@ -43,7 +43,7 @@ int main() {
 
   std::cout << "$ ";
   std::string input;
-  while (std::getline(std::cin, input) && !exit) {
+  while (!exit && std::getline(std::cin, input)) {
     Commands cmd = strToCmd(input);
 
     switch (cmd) {
@@ -66,9 +66,10 @@ int main() {
         }
         break;
       }
-      case cmd_exit:
+      case cmd_exit: {
         exit = true;
         break;
+      }
       default:
         std::cerr << input << ": command not found\n";
         break;
